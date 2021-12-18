@@ -1,4 +1,4 @@
 export const getRealEstates = async() => {
-    console.log("fetch");
-    return await fetch('http://localhost:3000/');
+    const response = await fetch('http://localhost:3000/');
+    return response?.json();
 }
