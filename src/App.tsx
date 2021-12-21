@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import {getRealEstates} from "./serverApi";
+import {Card} from "./components/card";
 
 function App() {
     const [data, setData] = useState<any>();
@@ -14,14 +15,17 @@ function App() {
     },[]);
     return (
         <div className="App">
-            {data?.map((data:any)=>(data?.realEstates?.length>0?<div key={data?.court}>
-                    <div>{data.court}</div>
-                    <ul>{
-                        data?.realEstates?.map((realEstate:any)=>(
-                            <li key={realEstate?.titel}>{realEstate?.titel}</li>
-                        ))
-                    }</ul>
-                </div>:null
+            {data?.map((data:any)=>(data?.realEstates?.length>0?
+                    <div className={"court-area"} key={data?.court}>
+                        <div key={data?.court} className={"court-name"}>{data?.court}</div>
+                        <div className={"card-list"}>
+                            {data?.realEstates?.map((realEstate:any)=>(
+                                <Card key={realEstate.titel} realEstate={realEstate}>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                :null
             ))}
         </div>
     );
