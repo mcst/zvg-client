@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {getRealEstates} from "./serverApi";
 import {Card} from "./components/card";
+import {ToolBar} from "./components/toolbar";
 
 function App() {
     const [data, setData] = useState<any>();
@@ -15,6 +16,7 @@ function App() {
     },[]);
     return (
         <div className="App">
+            <ToolBar/>
             {data?.map((data:any)=>(data?.realEstates?.length>0?
                     <div className={"court-area"} key={data?.court}>
                         <div key={data?.court} className={"court-name"}>{data?.court}</div>
