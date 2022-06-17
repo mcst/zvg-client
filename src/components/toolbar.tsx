@@ -1,32 +1,20 @@
+import { Button, ButtonGroup } from "react-bootstrap";
+import {iCourtFilter} from "../App";
 
-import react, { useEffect, useState } from "react"
-import { getConfig } from "../serverApi";
+export function ToolBar (props:{onChange:(value:any)=>void, courtsFilter?:iCourtFilter[]}){
+    const {courtsFilter=[], onChange} = props;
 
-export function ToolBar (){
-    const [options, setOptions] = useState<any[]>([]);
-    useEffect(()=>{
-        const fetch = async() => {
-            const {GERICHTE} = await getConfig();
-            const newOptions = [];
-            for(const [key, value] of Object.entries(GERICHTE)){
-                if(key && value) newOptions.push({key, value});
-            }
-            setOptions(newOptions);
-        }
-        fetch()
-    },[]);
 
-    const onClick = (value:any) => {
-        console.log(value);
+    const onClick = (name:string) => {
+        const newActiveOptions = courtsFilter.map(court=>court.name === name? {name:court.name, value:!court.value}:court);
+        onChange(newActiveOptions);
     }
-    console.log(options);
-    return <div>{options.map(option=><ToolBarButton key={option?.key} name={option?.key} onClick={()=>onClick(option)}/>)}</div>;
+    return <ButtonGroup key={"buttonGroup"}>{courtsFilter.map((option, index)=><ToolBarButton key={option.name||index} active={option.value} name={option?.name} onClick={()=>onClick(option.name)}/>)}</ButtonGroup>;
 }
 
-function ToolBarButton(props:{onClick:()=>void, name:string}){
-    const {name, onClick} = props;
-    const handleClick = (event:any) => {
-        const {value} = event.target;
-    }
-    return <div onClick={onClick}>{name}</div>;
+function ToolBarButton(props:{onClick:()=>void, name:string, active:boolean}){
+    const {name, onClick, active} = props;
+    const btnProps:any = {};
+    if(active) btnProps.active =true
+    return <Button key={name} variant="outline-primary" onClick={onClick} {...btnProps}>{name}</Button>;
 }
